@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十進数 足し算 $\to$ 二進数 変換</title>
+   <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+<div class="container">
+    <h2>二進数で見る足し算</h2>
+    <p>足したい十進数の数字を二つ入力してください。</p>
+
+    <input type="number" id="num1" value="10" min="0">
+    <span class="operator">+</span>
+    <input type="number" id="num2" value="5" min="0">
+    
+    <button onclick="convertAndCalculate()">計算して二進数で表示</button>
+    
+    <div id="error" class="error"></div>
+
+    <div id="result" class="result-box">
+        <p id="decResult">十進数での計算: 10 + 5 = 15</p>
+        <p id="binExpression">二進数での式: 1010 (2) + 0101 (2)</p>
+        <p id="binResult">二進数での結果: 1111 (2)</p>
+    </div>
+</div>
+
+<script>
+
+function convertAndCalculate() {
+    const num1Element = document.getElementById('num1');
+    const num2Element = document.getElementById('num2');
+    const errorElement = document.getElementById('error');
+    
+    errorElement.textContent = ''; // エラーメッセージをクリア
+
+   
+    const dec1 = parseInt(num1Element.value);
+    const dec2 = parseInt(num2Element.value);
+
+    // 2. バリデーション
+    if (isNaN(dec1) || isNaN(dec2) || dec1 < 0 || dec2 < 0) {
+        errorElement.textContent = "有効な非負の十進数を入力してください。";
+        return;
+    }
+
+    const decSum = dec1 + dec2;
+
+    const bin1 = dec1.toString(2);
+    const bin2 = dec2.toString(2);
+    const binSum = decSum.toString(2);
+
+    const maxLength = Math.max(bin1.length, bin2.length, binSum.length);
+    
+    // 桁合わせ用の関数 (padStartを使用)
+    const padBinary = (binStr) => binStr.padStart(maxLength, '0');
+    
+    const paddedBin1 = padBinary(bin1);
+    const paddedBin2 = padBinary(bin2);
+    const paddedBinSum = padBinary(binSum);
+
+
+    // 6. 結果をHTMLに出力
+    document.getElementById('decResult').innerHTML = 
+        `十進数での計算: <strong>${dec1} + ${dec2} = ${decSum}</strong>`;
+
+    document.getElementById('binExpression').innerHTML = 
+        `二進数での式: <strong>${paddedBin1} (2) + ${paddedBin2} (2)</strong>`;
+
+    document.getElementById('binResult').innerHTML = 
+        `二進数での結果: <strong>${paddedBinSum} (2)</strong>`;
+}
+
+window.onload = convertAndCalculate;
+</script>
+
+</body>
+</html>
